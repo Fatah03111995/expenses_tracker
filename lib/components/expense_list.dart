@@ -24,12 +24,14 @@ class _ExpenseListState extends State<ExpenseList> {
   }
 
   void onDelete(String id) async {
-    final response = await ExpenseController().deleteExpenseById(id);
-    if (response != 0) {
-      UtilComponent.showSnackBar(
-          context, 'Data has been deleted', Colors.green);
-      getAllExpenses();
-    } else {
+    try {
+      final response = await ExpenseController().deleteExpenseById(id);
+      if (response != 0) {
+        UtilComponent.showSnackBar(
+            context, 'Data has been deleted', Colors.green);
+        getAllExpenses();
+      }
+    } catch (e) {
       UtilComponent.showSnackBar(context, 'Please Try Again', Colors.red);
     }
   }
@@ -37,7 +39,8 @@ class _ExpenseListState extends State<ExpenseList> {
   @override
   void initState() {
     super.initState();
-    getAllExpenses();
+    allExpenses = ExpenseController.dummyData;
+    // getAllExpenses();
   }
 
   @override
@@ -53,9 +56,14 @@ class _ExpenseListState extends State<ExpenseList> {
                   style: TextStyles.mBold,
                 ),
               )
-            : ListView.builder(itemBuilder: (context, index) {
-                return ExpenseItem(
-                    expenseDataItem: allExpenses![index], onDelete: onDelete);
-              });
+            : Expanded(
+                child: ListView.builder(
+                    itemCount: allExpenses!.length,
+                    itemBuilder: (context, index) {
+                      return ExpenseItem(
+                          expenseDataItem: allExpenses![index],
+                          onDelete: onDelete);
+                    }),
+              );
   }
 }
