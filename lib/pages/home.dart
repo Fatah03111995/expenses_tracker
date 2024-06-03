@@ -1,4 +1,5 @@
 import 'package:expenses_tracker/components/expense_list.dart';
+import 'package:expenses_tracker/components/newexpense.dart';
 import 'package:expenses_tracker/themes/textstyles.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,10 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+              context: context, builder: (context) => const NewExpense());
+        },
         backgroundColor: Colors.deepPurple,
         child: const Icon(
           Icons.add,

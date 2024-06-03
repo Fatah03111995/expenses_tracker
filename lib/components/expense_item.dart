@@ -3,7 +3,6 @@ import 'package:expenses_tracker/model/expense.dart';
 import 'package:expenses_tracker/themes/textstyles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sqflite/sql.dart';
 
 class ExpenseItem extends StatelessWidget {
   final Expense expenseDataItem;
@@ -51,7 +50,7 @@ class ExpenseItem extends StatelessWidget {
                         ),
                       ]),
                       const SizedBox(height: 5),
-                      Text(expenseDataItem.amount.toStringAsFixed(0))
+                      Text('Rp ${expenseDataItem.amount.toStringAsFixed(0)}')
                     ],
                   )
                 ],
