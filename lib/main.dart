@@ -17,9 +17,10 @@ class MainApp extends StatelessWidget {
       ),
     );
 
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: const HomePage(),
+      theme: ThemeData.dark(),
     );
   }
 }

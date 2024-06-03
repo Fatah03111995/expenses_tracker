@@ -1,23 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-enum Category { work, food, leisure, baby, others }
-
-Map<Category, String> categoryToString = {
-  Category.baby: 'baby',
-  Category.food: 'food',
-  Category.leisure: 'leisure',
-  Category.others: 'others',
-  Category.work: 'work',
-};
-
-Map<String, Category> stringToCategory = {
-  'baby': Category.baby,
-  'food': Category.food,
-  'leisure': Category.leisure,
-  'others': Category.others,
-  'work': Category.work,
-};
+import 'package:expenses_tracker/controller/category.dart';
 
 class Expense {
   final String? id;
