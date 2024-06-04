@@ -22,7 +22,6 @@ class ExpenseController {
   Future<int> addExpense(Map<String, dynamic> data) async {
     Map<String, dynamic> addEntry = {
       'id': const Uuid().v4(),
-      'createdAt': DateTime.now().millisecondsSinceEpoch,
       'editedAt': DateTime.now().millisecondsSinceEpoch
     };
     data.addEntries(addEntry.entries);

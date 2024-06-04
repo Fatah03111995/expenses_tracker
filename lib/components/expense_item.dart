@@ -1,8 +1,8 @@
+import 'package:expenses_tracker/utility/time.dart';
 import 'package:expenses_tracker/controller/category.dart';
 import 'package:expenses_tracker/model/expense.dart';
 import 'package:expenses_tracker/themes/textstyles.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ExpenseItem extends StatelessWidget {
   final Expense expenseDataItem;
@@ -15,7 +15,7 @@ class ExpenseItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat.yMd().format(expenseDataItem.createdAt);
+    String formattedDate = Time.dateFormatYmd(expenseDataItem.createdAt);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 1.0),
       child: Card(
