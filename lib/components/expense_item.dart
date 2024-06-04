@@ -50,7 +50,7 @@ class ExpenseItem extends StatelessWidget {
                         ),
                       ]),
                       const SizedBox(height: 5),
-                      Text('Rp ${expenseDataItem.amount.toStringAsFixed(0)}')
+                      Text('Rp ${expenseDataItem.amount}')
                     ],
                   )
                 ],

@@ -7,7 +7,7 @@ class Expense {
   final String? id;
   final DateTime createdAt;
   String title;
-  double amount;
+  String amount;
   DateTime editedAt;
   Category category;
 
@@ -33,10 +33,9 @@ class Expense {
   factory Expense.fromMap(Map<String, dynamic> map) {
     return Expense(
       id: map['id'] != null ? map['id'] as String : null,
-      createdAt:
-          map['date'].fromMillisecondsSinceEpoch(map['createdAt'] as int),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       title: map['title'] as String,
-      amount: map['amount'] as double,
+      amount: map['amount'] as String,
       editedAt: DateTime.fromMillisecondsSinceEpoch(map['editedAt'] as int),
       category: stringToCategory[map['category']]!,
     );

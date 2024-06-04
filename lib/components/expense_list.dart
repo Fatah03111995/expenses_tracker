@@ -36,24 +36,33 @@ class _ExpenseListState extends State<ExpenseList> {
     }
   }
 
+  void onAdd(Map<String, dynamic> data) {
+    ExpenseController().addExpense(data);
+    getAllExpenses();
+  }
+
   @override
   void initState() {
     super.initState();
-    allExpenses = ExpenseController.dummyData;
-    // getAllExpenses();
+    // allExpenses = ExpenseController.dummyData;
+    getAllExpenses();
   }
 
   @override
   Widget build(BuildContext context) {
     return allExpenses == null
-        ? const CircularProgressIndicator(
-            color: Colors.purple,
+        ? const Center(
+            child: CircularProgressIndicator(
+              color: Colors.purple,
+            ),
           )
-        : allExpenses == []
-            ? Center(
-                child: Text(
-                  'No Data Here',
-                  style: TextStyles.mBold,
+        : allExpenses!.isEmpty
+            ? Expanded(
+                child: Center(
+                  child: Text(
+                    'No Data Here',
+                    style: TextStyles.mBold.copyWith(color: Colors.white),
+                  ),
                 ),
               )
             : Expanded(
@@ -61,8 +70,9 @@ class _ExpenseListState extends State<ExpenseList> {
                     itemCount: allExpenses!.length,
                     itemBuilder: (context, index) {
                       return ExpenseItem(
-                          expenseDataItem: allExpenses![index],
-                          onDelete: onDelete);
+                        expenseDataItem: allExpenses![index],
+                        onDelete: onDelete,
+                      );
                     }),
               );
   }

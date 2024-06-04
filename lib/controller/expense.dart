@@ -8,16 +8,14 @@ class ExpenseController {
   final LocalDataSource _localDataSource = LocalDataSource(
       dbName: constant.db,
       tableName: constant.expenseDataTable,
-      queryOnCreate: '''
-      CREATE TABLE ${constant.expenseDataTable}(
-        id TEXT PRIMARY KEY,
+      queryOnCreate:
+          '''CREATE TABLE ${constant.expenseDataTable}(id TEXT PRIMARY KEY,
         title TEXT,
         amount TEXT,
         category TEXT,
         createdAt INTEGER,
-        editedAt INTEGER,
-      )
-      ''');
+        editedAt INTEGER
+      )''');
 
   Future<int> addExpense(Map<String, dynamic> data) async {
     Map<String, dynamic> addEntry = {
@@ -53,28 +51,28 @@ class ExpenseController {
     Expense(
         id: '001',
         title: 'Bakso',
-        amount: 30000,
+        amount: '30000',
         category: Category.food,
         createdAt: DateTime.now(),
         editedAt: DateTime.now()),
     Expense(
         id: '002',
         title: 'Popok',
-        amount: 125000,
+        amount: '125000',
         category: Category.baby,
         createdAt: DateTime.now(),
         editedAt: DateTime.now()),
     Expense(
         id: '003',
         title: 'Jalan Jalan ke MAll',
-        amount: 700000,
+        amount: '700000',
         category: Category.leisure,
         createdAt: DateTime.now(),
         editedAt: DateTime.now()),
     Expense(
         id: '004',
         title: 'Bensin 1 bulan',
-        amount: 30000,
+        amount: '30000',
         category: Category.work,
         createdAt: DateTime.now(),
         editedAt: DateTime.now()),

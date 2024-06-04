@@ -1,4 +1,6 @@
 import 'package:expenses_tracker/components/input_text.dart';
+import 'package:expenses_tracker/controller/category.dart';
+import 'package:expenses_tracker/controller/expense.dart';
 import 'package:expenses_tracker/utility/time.dart';
 import 'package:expenses_tracker/themes/textstyles.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ class _NewExpenseState extends State<NewExpense> {
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
   DateTime? _selectedDate;
+  Category category = Category.others;
 
   void selectDate() async {
     DateTime? pickedDate = await Time.selectDate(context);
@@ -90,13 +93,54 @@ class _NewExpenseState extends State<NewExpense> {
                           ),
                         ),
                       ),
-                      const Expanded(
-                          child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Text('dropdown'))),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: DropdownButton(
+                              items: Category.values
+                                  .map((el) => DropdownMenuItem(
+                                        value: el,
+                                        child: Text(
+                                          el.name,
+                                          style: TextStyles.s,
+                                        ),
+                                      ))
+                                  .toList(),
+                              onChanged: (value) => setState(() {
+                                    category = value!;
+                                  }),
+                              dropdownColor: Colors.deepPurple,
+                              value: category),
+                        ),
+                      ),
                     ],
                   ),
-                )
+                ),
+                const SizedBox(height: 25),
+                ElevatedButton(
+                    style: const ButtonStyle(
+                      backgroundColor:
+                          WidgetStatePropertyAll(Colors.deepPurple),
+                      // Colors.deepPurple,
+                    ),
+                    onPressed: () {
+                      if (_keyForm.currentState!.validate()) {
+                        Map<String, dynamic> data = {
+                          'title': _titleController.text,
+                          'amount': _amountController.text,
+                          'category': category.name,
+                          'createdAt': _selectedDate == null
+                              ? Time.timeNow.millisecondsSinceEpoch
+                              : _selectedDate!.millisecondsSinceEpoch,
+                        };
+
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Text(
+                      'save',
+                      style: TextStyles.smBold.copyWith(color: Colors.white),
+                    ))
               ],
             ),
           ),
