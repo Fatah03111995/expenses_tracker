@@ -1,12 +1,12 @@
 import 'package:expenses_tracker/components/input_text.dart';
 import 'package:expenses_tracker/controller/category.dart';
-import 'package:expenses_tracker/controller/expense.dart';
 import 'package:expenses_tracker/utility/time.dart';
 import 'package:expenses_tracker/themes/textstyles.dart';
 import 'package:flutter/material.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  final Function onAdd;
+  const NewExpense({super.key, required this.onAdd});
 
   @override
   State<NewExpense> createState() => _NewExpenseState();
@@ -133,7 +133,7 @@ class _NewExpenseState extends State<NewExpense> {
                               ? Time.timeNow.millisecondsSinceEpoch
                               : _selectedDate!.millisecondsSinceEpoch,
                         };
-
+                        widget.onAdd(data, context);
                         Navigator.pop(context);
                       }
                     },

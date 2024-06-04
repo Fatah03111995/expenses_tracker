@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class ExpenseItem extends StatelessWidget {
   final Expense expenseDataItem;
-  final void Function(String id) onDelete;
+  final Function onDelete;
   const ExpenseItem({
     super.key,
     required this.expenseDataItem,
@@ -57,7 +57,7 @@ class ExpenseItem extends StatelessWidget {
               ),
               IconButton(
                   onPressed: () {
-                    onDelete(expenseDataItem.id!);
+                    onDelete(expenseDataItem.id!, context);
                   },
                   icon: const Icon(
                     Icons.delete,

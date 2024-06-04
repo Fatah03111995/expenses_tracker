@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:expenses_tracker/components/util_component.dart';
 import 'package:expenses_tracker/constants/constants.dart' as constant;
 import 'package:expenses_tracker/controller/category.dart';
 import 'package:expenses_tracker/controller/localdata_source.dart';
 import 'package:expenses_tracker/model/expense.dart';
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 class ExpenseController {
@@ -17,22 +21,30 @@ class ExpenseController {
         editedAt INTEGER
       )''');
 
-  Future<int> addExpense(Map<String, dynamic> data) async {
+  Future<int> addExpense(
+      Map<String, dynamic> data, BuildContext context) async {
     Map<String, dynamic> addEntry = {
       'id': const Uuid().v4(),
       'editedAt': DateTime.now().millisecondsSinceEpoch
     };
     data.addEntries(addEntry.entries);
-    return await _localDataSource.addData(data);
+    final response = await _localDataSource.addData(data);
+    UtilComponent.showSnackBar(context, 'Data has been added', Colors.green);
+    return response;
   }
 
-  Future<int> deleteExpenseById(String id) async {
-    return await _localDataSource.deleteDataById(id);
+  Future<int> deleteExpenseById(String id, BuildContext context) async {
+    final response = await _localDataSource.deleteDataById(id);
+    UtilComponent.showSnackBar(context, 'Data has been deleted', Colors.green);
+    return response;
   }
 
-  Future<int> updateExpenseById(String id, Map<String, dynamic> data) async {
+  Future<int> updateExpenseById(
+      String id, Map<String, dynamic> data, BuildContext context) async {
     data['editedAt'] = DateTime.now().millisecondsSinceEpoch;
-    return await _localDataSource.updateDataById(id, data);
+    final response = await _localDataSource.updateDataById(id, data);
+    UtilComponent.showSnackBar(context, 'Data has been updated', Colors.green);
+    return response;
   }
 
   Future<List<Expense>> getAllExpenses() async {
