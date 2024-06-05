@@ -1,9 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:expenses_tracker/components/expense_list.dart';
-import 'package:expenses_tracker/components/new_expense.dart';
+import 'package:expenses_tracker/components/chart/chart_master.dart';
+import 'package:expenses_tracker/components/expense/expense_list.dart';
+import 'package:expenses_tracker/components/expense/new_expense.dart';
 import 'package:expenses_tracker/components/util_component.dart';
-import 'package:expenses_tracker/controller/expense.dart';
+import 'package:expenses_tracker/controller/expense_db.dart';
 import 'package:expenses_tracker/model/expense.dart';
 import 'package:expenses_tracker/themes/textstyles.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Expense>? allExpenses;
+  bool isChartDisplay = false;
 
   //---------- FUNCTION FOR ALL APPS
   void showAlertDelete(String id, BuildContext context) {
@@ -109,6 +111,24 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> fitur = [
+      ExpenseList(
+        allExpenses: allExpenses,
+        onDelete: showAlertDelete,
+        onUpdate: onUpdate,
+      )
+    ];
+
+    if (isChartDisplay) {
+      fitur.insert(
+          0,
+          Expanded(
+            child: Chart(
+              expenses: allExpenses!,
+            ),
+          ));
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
@@ -116,6 +136,21 @@ class _HomePageState extends State<HomePage> {
           'Expense Tracker',
           style: TextStyles.sm,
         ),
+        actions: [
+          IconButton.filled(
+            onPressed: () {
+              setState(() {
+                isChartDisplay = !isChartDisplay;
+              });
+            },
+            icon: Icon(
+              Icons.bar_chart,
+              color: isChartDisplay ? Colors.purple : Colors.grey,
+            ),
+            style: ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(Colors.white)),
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -132,18 +167,10 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         child: Stack(
           children: [
-            Column(children: [
-              Text(
-                'Chart Here',
-                style: TextStyles.m,
-              ),
-              // ignore: prefer_const_constructors
-              ExpenseList(
-                allExpenses: allExpenses,
-                onDelete: showAlertDelete,
-                onUpdate: onUpdate,
-              )
-            ]),
+            Column(children: fitur),
+
+            //------- TOTAL EXPENSES
+
             Align(
               alignment: Alignment.bottomLeft,
               child: Container(
@@ -167,6 +194,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             )
+
+            //------------- END TOTAL EXPENSES
           ],
         ),
       ),

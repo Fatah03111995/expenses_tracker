@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:expenses_tracker/components/expense_item.dart';
+import 'package:expenses_tracker/components/expense/expense_item.dart';
 import 'package:expenses_tracker/model/expense.dart';
 import 'package:expenses_tracker/themes/textstyles.dart';
 import 'package:flutter/material.dart';

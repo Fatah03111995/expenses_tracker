@@ -1,4 +1,4 @@
-import 'package:expenses_tracker/components/update_expense.dart';
+import 'package:expenses_tracker/components/expense/update_expense.dart';
 import 'package:expenses_tracker/utility/time.dart';
 import 'package:expenses_tracker/controller/category.dart';
 import 'package:expenses_tracker/model/expense.dart';

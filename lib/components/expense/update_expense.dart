@@ -1,18 +1,21 @@
 import 'package:expenses_tracker/components/input_text.dart';
 import 'package:expenses_tracker/controller/category.dart';
+import 'package:expenses_tracker/model/expense.dart';
 import 'package:expenses_tracker/utility/time.dart';
 import 'package:expenses_tracker/themes/textstyles.dart';
 import 'package:flutter/material.dart';
 
-class NewExpense extends StatefulWidget {
-  final Function onAdd;
-  const NewExpense({super.key, required this.onAdd});
+class UpdateExpense extends StatefulWidget {
+  final Function onUpdate;
+  final Expense expenseDataItem;
+  const UpdateExpense(
+      {super.key, required this.onUpdate, required this.expenseDataItem});
 
   @override
-  State<NewExpense> createState() => _NewExpenseState();
+  State<UpdateExpense> createState() => _UpdateExpenseState();
 }
 
-class _NewExpenseState extends State<NewExpense> {
+class _UpdateExpenseState extends State<UpdateExpense> {
   final _keyForm = GlobalKey<FormState>();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
@@ -24,6 +27,17 @@ class _NewExpenseState extends State<NewExpense> {
     setState(() {
       _selectedDate = pickedDate;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    //-------------- FILL INPUT WITH PREVIOUS DATA
+    _selectedDate = widget.expenseDataItem.createdAt;
+    category = widget.expenseDataItem.category;
+    _amountController.text = widget.expenseDataItem.amount.toStringAsFixed(0);
+    _titleController.text = widget.expenseDataItem.title;
   }
 
   @override
@@ -45,7 +59,7 @@ class _NewExpenseState extends State<NewExpense> {
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
         child: Column(children: [
           Text(
-            'Add Expense',
+            'Edit Expense',
             style: TextStyles.m.copyWith(color: Colors.deepPurple),
           ),
           Form(
@@ -68,6 +82,7 @@ class _NewExpenseState extends State<NewExpense> {
                   padding: const EdgeInsets.all(6.0),
                   child: Row(
                     children: [
+                      // --------------------- DATE PICKER INPUT
                       Expanded(
                         child: TextButton(
                           onPressed: () {
@@ -93,6 +108,8 @@ class _NewExpenseState extends State<NewExpense> {
                           ),
                         ),
                       ),
+                      // --------------------- END DATE PICKER INPUT
+
                       Expanded(
                         child: Align(
                           alignment: Alignment.centerRight,
@@ -133,7 +150,8 @@ class _NewExpenseState extends State<NewExpense> {
                               ? Time.timeNow.millisecondsSinceEpoch
                               : _selectedDate!.millisecondsSinceEpoch,
                         };
-                        widget.onAdd(data, context);
+                        widget.onUpdate(
+                            widget.expenseDataItem.id, data, context);
                         Navigator.pop(context);
                       }
                     },

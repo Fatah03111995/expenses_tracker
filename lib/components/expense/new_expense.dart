@@ -1,21 +1,18 @@
 import 'package:expenses_tracker/components/input_text.dart';
 import 'package:expenses_tracker/controller/category.dart';
-import 'package:expenses_tracker/model/expense.dart';
 import 'package:expenses_tracker/utility/time.dart';
 import 'package:expenses_tracker/themes/textstyles.dart';
 import 'package:flutter/material.dart';
 
-class UpdateExpense extends StatefulWidget {
-  final Function onUpdate;
-  final Expense expenseDataItem;
-  const UpdateExpense(
-      {super.key, required this.onUpdate, required this.expenseDataItem});
+class NewExpense extends StatefulWidget {
+  final Function onAdd;
+  const NewExpense({super.key, required this.onAdd});
 
   @override
-  State<UpdateExpense> createState() => _UpdateExpenseState();
+  State<NewExpense> createState() => _NewExpenseState();
 }
 
-class _UpdateExpenseState extends State<UpdateExpense> {
+class _NewExpenseState extends State<NewExpense> {
   final _keyForm = GlobalKey<FormState>();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
@@ -27,15 +24,6 @@ class _UpdateExpenseState extends State<UpdateExpense> {
     setState(() {
       _selectedDate = pickedDate;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedDate = widget.expenseDataItem.createdAt;
-    category = widget.expenseDataItem.category;
-    _amountController.text = widget.expenseDataItem.amount.toStringAsFixed(0);
-    _titleController.text = widget.expenseDataItem.title;
   }
 
   @override
@@ -57,7 +45,7 @@ class _UpdateExpenseState extends State<UpdateExpense> {
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
         child: Column(children: [
           Text(
-            'Edit Expense',
+            'Add Expense',
             style: TextStyles.m.copyWith(color: Colors.deepPurple),
           ),
           Form(
@@ -80,6 +68,7 @@ class _UpdateExpenseState extends State<UpdateExpense> {
                   padding: const EdgeInsets.all(6.0),
                   child: Row(
                     children: [
+                      // ---------------------- DATE PICKER INPUT
                       Expanded(
                         child: TextButton(
                           onPressed: () {
@@ -105,6 +94,8 @@ class _UpdateExpenseState extends State<UpdateExpense> {
                           ),
                         ),
                       ),
+                      // ----------------------------------- END DATE PICKER INPUT
+
                       Expanded(
                         child: Align(
                           alignment: Alignment.centerRight,
@@ -145,8 +136,7 @@ class _UpdateExpenseState extends State<UpdateExpense> {
                               ? Time.timeNow.millisecondsSinceEpoch
                               : _selectedDate!.millisecondsSinceEpoch,
                         };
-                        widget.onUpdate(
-                            widget.expenseDataItem.id, data, context);
+                        widget.onAdd(data, context);
                         Navigator.pop(context);
                       }
                     },
