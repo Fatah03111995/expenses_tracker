@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:expenses_tracker/components/expense_list.dart';
-import 'package:expenses_tracker/components/newexpense.dart';
+import 'package:expenses_tracker/components/new_expense.dart';
 import 'package:expenses_tracker/components/util_component.dart';
 import 'package:expenses_tracker/controller/expense.dart';
 import 'package:expenses_tracker/model/expense.dart';
@@ -91,6 +91,14 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  double summing() {
+    if (allExpenses == null || allExpenses!.isEmpty) return 0;
+    List<double> allAmountData = List.generate(allExpenses!.length, (index) {
+      return allExpenses![index].amount;
+    });
+    return allAmountData.reduce((value, element) => value + element);
+  }
+
   // ------------- END  ALL FUNCTION FOR APP
 
   @override
@@ -122,18 +130,45 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        child: Column(children: [
-          Text(
-            'Chart Here',
-            style: TextStyles.m,
-          ),
-          // ignore: prefer_const_constructors
-          ExpenseList(
-            allExpenses: allExpenses,
-            onDelete: showAlertDelete,
-            onUpdate: onUpdate,
-          )
-        ]),
+        child: Stack(
+          children: [
+            Column(children: [
+              Text(
+                'Chart Here',
+                style: TextStyles.m,
+              ),
+              // ignore: prefer_const_constructors
+              ExpenseList(
+                allExpenses: allExpenses,
+                onDelete: showAlertDelete,
+                onUpdate: onUpdate,
+              )
+            ]),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                    color: Colors.deepPurple[400],
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20))),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Total : Rp ${summing().toStringAsFixed(0)} ,-',
+                      style: TextStyles.smBold,
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

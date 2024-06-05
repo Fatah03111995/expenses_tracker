@@ -17,7 +17,6 @@ class ExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(allExpenses?.length);
     return allExpenses == null
         ? const Center(
             child: CircularProgressIndicator(
@@ -44,6 +43,7 @@ class ExpenseList extends StatelessWidget {
                         },
                         child: ExpenseItem(
                           expenseDataItem: allExpenses![index],
+                          onUpdate: onUpdate,
                         ),
                       );
                     }),
