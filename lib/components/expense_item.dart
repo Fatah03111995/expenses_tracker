@@ -6,11 +6,9 @@ import 'package:flutter/material.dart';
 
 class ExpenseItem extends StatelessWidget {
   final Expense expenseDataItem;
-  final Function onDelete;
   const ExpenseItem({
     super.key,
     required this.expenseDataItem,
-    required this.onDelete,
   });
 
   @override
@@ -38,6 +36,11 @@ class ExpenseItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        expenseDataItem.title,
+                        style: TextStyles.sBold,
+                      ),
+                      const SizedBox(height: 5),
                       Row(children: [
                         Icon(
                           categoryIcon[expenseDataItem.category],
@@ -45,25 +48,15 @@ class ExpenseItem extends StatelessWidget {
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          expenseDataItem.title,
-                          style: TextStyles.sBold,
+                          expenseDataItem.category.name,
+                          style: TextStyles.s,
                         ),
                       ]),
-                      const SizedBox(height: 5),
-                      Text('Rp ${expenseDataItem.amount}')
                     ],
                   )
                 ],
               ),
-              IconButton(
-                  onPressed: () {
-                    onDelete(expenseDataItem.id!, context);
-                  },
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.white,
-                    size: 15,
-                  ))
+              Text('Rp ${expenseDataItem.amount.toStringAsFixed(0)}')
             ],
           ),
         ),

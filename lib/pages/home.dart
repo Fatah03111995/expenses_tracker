@@ -28,10 +28,13 @@ class _HomePageState extends State<HomePage> {
 
   void onDelete(String id, BuildContext context) async {
     try {
-      await ExpenseController().deleteExpenseById(id, context);
-      getAllExpenses();
+      final response = await ExpenseController().deleteExpenseById(id, context);
+      if (response != 0) {
+        getAllExpenses();
+      }
     } catch (e) {
-      UtilComponent.showSnackBar(context, 'Please Try Again', Colors.red);
+      UtilComponent.showSnackBar(
+          context: context, text: 'Please Try Again', color: Colors.red);
     }
   }
 
@@ -40,7 +43,8 @@ class _HomePageState extends State<HomePage> {
       await ExpenseController().addExpense(data, context);
       getAllExpenses();
     } catch (e) {
-      UtilComponent.showSnackBar(context, 'Unkown Error : $e', Colors.red);
+      UtilComponent.showSnackBar(
+          context: context, text: 'Unkown Error : $e', color: Colors.red);
     }
   }
 
@@ -50,7 +54,8 @@ class _HomePageState extends State<HomePage> {
       await ExpenseController().updateExpenseById(id, data, context);
       getAllExpenses();
     } catch (e) {
-      UtilComponent.showSnackBar(context, 'Unkown Error : $e', Colors.red);
+      UtilComponent.showSnackBar(
+          context: context, text: 'Unkown Error : $e', color: Colors.red);
     }
   }
 

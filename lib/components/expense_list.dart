@@ -36,9 +36,14 @@ class ExpenseList extends StatelessWidget {
                 child: ListView.builder(
                     itemCount: allExpenses!.length,
                     itemBuilder: (context, index) {
-                      return ExpenseItem(
-                        expenseDataItem: allExpenses![index],
-                        onDelete: onDelete,
+                      return Dismissible(
+                        key: ValueKey(allExpenses![index]),
+                        onDismissed: (direction) {
+                          onDelete(allExpenses![index].id, context);
+                        },
+                        child: ExpenseItem(
+                          expenseDataItem: allExpenses![index],
+                        ),
                       );
                     }),
               );

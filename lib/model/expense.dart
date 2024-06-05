@@ -7,7 +7,7 @@ class Expense {
   final String? id;
   final DateTime createdAt;
   String title;
-  String amount;
+  double amount;
   DateTime editedAt;
   Category category;
 
@@ -35,7 +35,7 @@ class Expense {
       id: map['id'] != null ? map['id'] as String : null,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       title: map['title'] as String,
-      amount: map['amount'] as String,
+      amount: double.tryParse(map['amount']) ?? 0,
       editedAt: DateTime.fromMillisecondsSinceEpoch(map['editedAt'] as int),
       category: stringToCategory[map['category']]!,
     );
