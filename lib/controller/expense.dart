@@ -4,7 +4,6 @@ import 'package:expenses_tracker/components/util_component.dart';
 import 'package:expenses_tracker/constants/constants.dart' as constant;
 import 'package:expenses_tracker/controller/localdata_source.dart';
 import 'package:expenses_tracker/model/expense.dart';
-import 'package:expenses_tracker/themes/textstyles.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -35,41 +34,10 @@ class ExpenseController {
   }
 
   Future<int> deleteExpenseById(String id, BuildContext context) async {
-    int responseReturn = 0;
-    UtilComponent.showAlert(
-      context: context,
-      content: Text(
-        'Are you sure to delete this data ?',
-        style: TextStyles.sm,
-      ),
-      action: [
-        TextButton(
-            onPressed: () async {
-              final response = await _localDataSource.deleteDataById(id);
-              UtilComponent.showSnackBar(
-                  context: context,
-                  text: 'Data has been deleted',
-                  color: Colors.green);
-              responseReturn = response;
-              Navigator.pop(context);
-            },
-            child: Text(
-              'Delete',
-              style: TextStyles.s,
-            )),
-        ElevatedButton(
-            style: const ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(Colors.white)),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(
-              'Cancel',
-              style: TextStyles.sBold.copyWith(color: Colors.black),
-            ))
-      ],
-    );
-    return responseReturn;
+    final response = await _localDataSource.deleteDataById(id);
+    UtilComponent.showSnackBar(
+        context: context, text: 'Data has been deleted', color: Colors.green);
+    return response;
   }
 
   Future<int> updateExpenseById(

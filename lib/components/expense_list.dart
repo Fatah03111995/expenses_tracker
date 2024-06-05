@@ -17,6 +17,7 @@ class ExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(allExpenses?.length);
     return allExpenses == null
         ? const Center(
             child: CircularProgressIndicator(
@@ -37,7 +38,7 @@ class ExpenseList extends StatelessWidget {
                     itemCount: allExpenses!.length,
                     itemBuilder: (context, index) {
                       return Dismissible(
-                        key: ValueKey(allExpenses![index]),
+                        key: ValueKey(allExpenses![index].id),
                         onDismissed: (direction) {
                           onDelete(allExpenses![index].id, context);
                         },

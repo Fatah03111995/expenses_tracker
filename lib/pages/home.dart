@@ -19,6 +19,40 @@ class _HomePageState extends State<HomePage> {
   List<Expense>? allExpenses;
 
   //---------- FUNCTION FOR ALL APPS
+  void showAlertDelete(String id, BuildContext context) {
+    UtilComponent.showAlert(
+        context: context,
+        content: Text(
+          'Are you sure deletting this data ?',
+          style: TextStyles.s,
+        ),
+        action: [
+          TextButton(
+            onPressed: () {
+              onDelete(id, context);
+              Navigator.pop(context);
+            },
+            child: Text(
+              'Delete',
+              style: TextStyles.s.copyWith(color: Colors.white),
+            ),
+          ),
+          ElevatedButton(
+            style: const ButtonStyle(
+                elevation: WidgetStatePropertyAll(5),
+                backgroundColor: WidgetStatePropertyAll(Colors.white)),
+            onPressed: () {
+              Navigator.pop(context);
+              getAllExpenses();
+            },
+            child: Text(
+              'Cancel',
+              style: TextStyles.s.copyWith(color: Colors.deepPurple),
+            ),
+          )
+        ]);
+  }
+
   void getAllExpenses() async {
     final data = await ExpenseController().getAllExpenses();
     setState(() {
@@ -28,10 +62,8 @@ class _HomePageState extends State<HomePage> {
 
   void onDelete(String id, BuildContext context) async {
     try {
-      final response = await ExpenseController().deleteExpenseById(id, context);
-      if (response != 0) {
-        getAllExpenses();
-      }
+      await ExpenseController().deleteExpenseById(id, context);
+      getAllExpenses();
     } catch (e) {
       UtilComponent.showSnackBar(
           context: context, text: 'Please Try Again', color: Colors.red);
@@ -98,7 +130,7 @@ class _HomePageState extends State<HomePage> {
           // ignore: prefer_const_constructors
           ExpenseList(
             allExpenses: allExpenses,
-            onDelete: onDelete,
+            onDelete: showAlertDelete,
             onUpdate: onUpdate,
           )
         ]),
