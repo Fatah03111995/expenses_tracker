@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:expenses_tracker/components/chart/chart_master.dart';
+import 'package:expenses_tracker/components/date_filter.dart';
 import 'package:expenses_tracker/components/expense/expense_list.dart';
 import 'package:expenses_tracker/components/expense/new_expense.dart';
 import 'package:expenses_tracker/components/util_component.dart';
@@ -19,6 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Expense>? allExpenses;
   bool isChartDisplay = false;
+  bool isFilteredByDate = false;
 
   //---------- FUNCTION FOR ALL APPS
   void showAlertDelete(String id, BuildContext context) {
@@ -101,6 +103,22 @@ class _HomePageState extends State<HomePage> {
     return allAmountData.reduce((value, element) => value + element);
   }
 
+  void onFilterByDate({required DateTime start, required DateTime end}) {
+    if (allExpenses != null || allExpenses!.isNotEmpty) {
+      setState(() {
+        allExpenses = allExpenses
+            ?.where((Expense expense) =>
+                expense.createdAt.millisecondsSinceEpoch >=
+                    start.millisecondsSinceEpoch &&
+                expense.createdAt.millisecondsSinceEpoch <=
+                    end.millisecondsSinceEpoch)
+            .toList();
+        isFilteredByDate = true;
+      });
+    }
+    return;
+  }
+
   // ------------- END  ALL FUNCTION FOR APP
 
   @override
@@ -131,13 +149,35 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.deepPurple,
         title: Text(
           'Expense Tracker',
           style: TextStyles.sm,
         ),
         actions: [
-          IconButton.filled(
+          Builder(builder: (context) {
+            return IconButton(
+              onPressed: () {
+                if (!isFilteredByDate) {
+                  showBottomSheet(
+                      context: context,
+                      builder: (context) =>
+                          DateFilter(onFilter: onFilterByDate));
+                  return;
+                }
+                getAllExpenses();
+                setState(() {
+                  isFilteredByDate = !isFilteredByDate;
+                });
+              },
+              icon: Icon(
+                Icons.calendar_month,
+                color: isFilteredByDate ? Colors.purple[200] : Colors.grey,
+              ),
+            );
+          }),
+          IconButton(
             onPressed: () {
               setState(() {
                 isChartDisplay = !isChartDisplay;
@@ -145,10 +185,8 @@ class _HomePageState extends State<HomePage> {
             },
             icon: Icon(
               Icons.bar_chart,
-              color: isChartDisplay ? Colors.purple : Colors.grey,
+              color: isChartDisplay ? Colors.purple[200] : Colors.grey,
             ),
-            style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(Colors.white)),
           )
         ],
       ),
@@ -165,31 +203,28 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        child: Stack(
+        child: Column(
           children: [
-            Column(children: fitur),
+            Expanded(child: Column(children: fitur)),
 
             //------- TOTAL EXPENSES
 
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Container(
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                    color: Colors.deepPurple[400],
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20))),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Total : Rp ${summing().toStringAsFixed(0)} ,-',
-                      style: TextStyles.smBold,
-                    ),
+            Container(
+              width: double.infinity,
+              height: 50,
+              decoration: BoxDecoration(
+                  color: Colors.deepPurple[400],
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20))),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Total : Rp ${summing().toStringAsFixed(0)} ,-',
+                    style: TextStyles.smBold,
                   ),
                 ),
               ),
